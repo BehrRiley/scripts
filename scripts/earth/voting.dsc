@@ -186,14 +186,13 @@ voting_events:
   events:
     on votifier vote:
       - define service <context.service.replace_text[.].with[_]>
-      - if <player[<context.username>]||null> == null:
+      - define player <server.match_player[<context.username>].if_null[null]>
+      - if <[player]> == null:
         - stop
-      - define player <player[<context.username>]>
-      - adjust <queue> linked_player:<[player]>
       - flag <[player]> voted duration:24h
       - flag <[player]> votes.service.<[service]>:+:1
       - flag <[player]> votes.month.<util.time_now.start_of_month.epoch_millis.div[1000]>.service.<[service]>:+:1
-      - define total_votes <player.flag[votes.service].keys.parse_tag[<player.flag[votes.service.<[parse_value]>]>].sum||0>
+      - define total_votes <[player].flag[votes.service].keys.parse_tag[<[player].flag[votes.service.<[parse_value]>]>].sum||0>
       - define tier <yaml[voting_rewards].list_keys[tiers].filter_tag[<yaml[voting_rewards].read[tiers.<[filter_value]>].is_less_than_or_equal_to[<[total_votes]>]>].highest>
       - foreach <yaml[voting_rewards].list_keys[rewards.tier.<[tier]>.every]> as:k:
         - if <[total_votes].mod[<[k]>]> == 0:
