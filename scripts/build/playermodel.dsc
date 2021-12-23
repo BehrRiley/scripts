@@ -7,7 +7,7 @@ playermodel_command:
     tab complete:
     - if !<player.has_permission[playermodel]>:
         - stop
-    - define index <context.raw_args.split[].count[<&sp>]>
+    - define index <context.raw_args.to_list.count[<&sp>]>
     - define disposed_items <list[]>
     - if <[index]> == 0:
         - if <context.args.get[1].length||0> < 3:
@@ -68,11 +68,12 @@ playermodel_command:
         - adjust <[model]> equipment:<item[air]>|<item[air]>|<item[air]>|<item[<[material]>].with[custom_model_data=<[custom_model_data]>]>
         - adjust <player> passengers:<[model]>
         - flag <player> playermodel:<[model]>
-            
+
 player_model_entity:
     type: entity
     entity_type: armor_stand
-    gravity: false
-    invulnerable: true
-    custom:
+    mechanisms:
+        gravity: false
+        invulnerable: true
+    data:
         interactable: false

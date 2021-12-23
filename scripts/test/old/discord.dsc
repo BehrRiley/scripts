@@ -1,12 +1,12 @@
 discord_startup:
-	type: world
+    type: world
     debug: false
     config:
-    	defaults:
-        	discord:
-            	message_format: "<player.name> : <context.message>"
+        defaults:
+            discord:
+                message_format: "<player.name> : <context.message>"
     events:
-    	on server starts:
+        after server start:
         - stop
         - ~discordconnect id:orbis tokenfile:data/discord.txt
         on player chats:

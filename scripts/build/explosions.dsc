@@ -83,16 +83,16 @@ explosion_handler:
     - define regen <list[]>
     - define r <map[]>
     - foreach <[new_blocks].parse[block]> as:b:
-    	- define dur <util.random.int[460].to[540]>t
-    	- define when <[now].add[<[dur]>]>
+        - define dur <util.random.int[460].to[540]>t
+        - define when <[now].add[<[dur]>]>
         - define regen <[regen].include[<[b]>]>
         - define r <[r].with[regen.material.<[b]>].as[<[b].material>]>
         - define r <[r].with[regen.inventory.<[b]>].as[<[b].inventory.map_slots||null>]>
         - flag <[b]> regen.after:true expire:<util.time_now.add[<[dur]>]>
         - modifyblock <[b]> air
     - while <[regen].filter[has_flag[regen.after]].size.equals[0].not>:
-    	- foreach <[regen].parse[block]> as:b:
-        	- if <[b].has_flag[regen.after].not>:
-            	- modifyblock <[b]> <[r].get[regen.material.<[b]>]>
+        - foreach <[regen].parse[block]> as:b:
+            - if <[b].has_flag[regen.after].not>:
+                - modifyblock <[b]> <[r].get[regen.material.<[b]>]>
                 - wait 1t
         - wait 5t

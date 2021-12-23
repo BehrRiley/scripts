@@ -1,5 +1,5 @@
 end_events:
-	type: world
+    type: world
     debug: false
     events:
       after player changes world to world_the_end:

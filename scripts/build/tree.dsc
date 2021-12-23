@@ -1,14 +1,14 @@
 command_tree:
-	type: command
+    type: command
     debug: true
     name: maketree
     script:
     - if <schematic.list.parse[to_lowercase].contains[<context.args.get[1].to_lowercase>]>:
-    	- narrate "schematic already exists"
+        - narrate "schematic already exists"
         - stop
     - schematic create <player.we_selection> noair <player.location> name:<context.args.get[1]>
     - schematic name:<context.args.get[1]> save filename:<context.args.get[1]>
-    - narrate "saved"
+    - narrate saved
     - foreach <player.we_selection.blocks[!air]>:
         - modifyblock <[value]> air
 
@@ -33,9 +33,9 @@ schematics_events:
     type: world
     debug: false
     events:
-        on server start:
+        after server start:
         - foreach <proc[list_files_recursively].context[schematics]> as:schem:
-            - schematic name:<[schem].replace[.schem].with[]> load filename:<[schem].replace[.schem].with[]>
+            - schematic name:<[schem].replace_text[.schem].with[]> load filename:<[schem].replace_text[.schem].with[]>
 
 command_pastetree:
     type: command
@@ -78,5 +78,5 @@ command_pastetree:
             - if <[i].is_more_than[3]>:
                 # - wait 1t
                 - define i 0
-        	- wait 1t
+            - wait 1t
         - define blocks <[rel].deduplicate.exclude[<[done]>]>

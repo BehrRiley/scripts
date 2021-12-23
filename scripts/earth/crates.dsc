@@ -212,7 +212,7 @@ crate_flare_item:
     custom_model_data: 50
   flags:
     crate_type: supply
-  display name: "<&e>Supply Signal"
+  display name: <&e>Supply Signal
   lore:
   - <&6>• Calls in a basic Supply Drop
   - <&6>  At your location.

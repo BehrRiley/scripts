@@ -11,6 +11,8 @@ build_world_loader:
 
 build_command:
     type: command
+    usage: /build
+    description: Teleports you to the Build spawn
     name: build
     script:
         - teleport <player> <world[build].spawn_location>

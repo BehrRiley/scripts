@@ -17,7 +17,7 @@ turtle_master_cooldown:
                         - narrate <yaml[config].parsed_key[messages.turtle_master_potion_cooldown]>
                     - else:
                         - flag <player> turtle_potion_cooldown:1 duration:<yaml[config].parsed_key[turtle_master_cooldown]>
-                        
+
 health_potion_mod:
     type: world
     debug: false

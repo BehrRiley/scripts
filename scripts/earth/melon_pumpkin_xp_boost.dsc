@@ -1,8 +1,8 @@
 melon_pumpkin_xp_boost_events:
-	type: world
+    type: world
     debug: false
     events:
-    	on player breaks pumpkin:
+        on player breaks pumpkin:
         - determine 15
         on player breaks melon:
         - determine 15

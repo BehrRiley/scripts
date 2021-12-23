@@ -34,12 +34,12 @@ flag_handler:
         on player quit:
         - if <player.has_flag[vanish]>:
             - determine NONE
-        
+
 no_slash_op:
     type: world
     debug: false
     events:
         on command:
         - if <context.command> == op && <context.source_type> != SERVER:
-            - narrate "no"
+            - narrate no
             - determine passively cancelled

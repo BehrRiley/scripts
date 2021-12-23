@@ -3,7 +3,7 @@ startup_handler:
     type: world
     debug: false
     events:
-        on server start:
+        after server start:
         - createworld build worldtype:FLAT
         - createworld template_oasis generator:Terra<&co>DESERT
         - createworld template_oasis_old generator:Terra<&co>DESERT

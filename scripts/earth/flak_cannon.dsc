@@ -16,7 +16,7 @@ flak_cannon_inventory:
     title: Flak Cannon
     size: 9
     slots:
-    - "[] [] [] [] [] [] [] [] []"
+    - [] [] [] [] [] [] [] [] []
 
 place_flak_cannon:
     type: task
@@ -39,18 +39,18 @@ flak_cannon_handler:
                 damage: 10
     events:
         on tick:
-        	- stop
+            - stop
             - foreach <server.online_players> as:p:
                 - if <[p].has_flag[old_loc]>:
                     - flag <[p]> vel:<[p].location.sub[<[p].flag[old_loc].as_location>]>
                 - flag <[p]> old_loc:<[p].location>
         on delta time secondly:
-        	- stop
+            - stop
             - foreach <server.notes[inventories].filter[note_name.starts_with[flak_cannon_]]||<list[]>> as:i:
-                - define c <[i].note_name.replace[flak_cannon_].with[].as_location>
+                - define c <[i].note_name.replace_text[flak_cannon_].with[].as_location>
                 - if <[c].material||null> == null:
                     - foreach next
-                - foreach <[c].find.players.within[64]> as:t:
+                - foreach <[c].find_players_within[64]> as:t:
                     - if <[t].nation.relation[<[c].town.nation>]||null> == allies:
                         - foreach next
                     - if !<[t].location.line_of_sight[<[c]>]>:

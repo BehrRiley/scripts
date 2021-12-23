@@ -1,3 +1,3 @@
 garage_inventory_main:
-	type: inventory
+    type: inventory
     debug: false

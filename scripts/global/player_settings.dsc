@@ -40,10 +40,10 @@ player_settings_events:
 
 player_settings_choose_enemy_color_inventory:
     type: inventory
-    inventory_type: chest
+    inventory: chest
     size: 9
     gui: true
-    title: "<&l><&b>TODO"
+    title: <&l><&b>TODO
     procedural items:
     - determine <list[]>
     definitions:

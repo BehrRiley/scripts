@@ -5,7 +5,7 @@ item_in_chat_events:
     config:
         defaults:
             itemchat:
-                permission: "itemchat.use"
+                permission: itemchat.use
     events:
         on player chats:
             - if <player.has_permission[<yaml[config].read[itemchat.permission]>]>:
@@ -17,6 +17,6 @@ item_in_chat_events:
                     - define item <player.item_in_hand>
                     - define message <context.full_text>
                     - if <player.item_in_hand.quantity.is_more_than[1]>:
-                        - narrate <context.full_text.replace[<&lb>item<&rb>].with[<element[<&lb><player.item_in_hand.display||<player.item_in_hand.material.name.to_titlecase.replace[_].with[<&sp>]>><&r><&sp><player.item_in_hand.quantity>x<&r><&rb>].on_hover[<player.item_in_hand>].type[show_item]>]> targets:<context.recipients>
+                        - narrate <context.full_text.replace[<&lb>item<&rb>].with[<element[<&lb><player.item_in_hand.display||<player.item_in_hand.material.name.to_titlecase.replace_text[_].with[<&sp>]>><&r><&sp><player.item_in_hand.quantity>x<&r><&rb>].on_hover[<player.item_in_hand>].type[show_item]>]> targets:<context.recipients>
                     - else:
-                        - narrate <context.full_text.replace[<&lb>item<&rb>].with[<element[<&lb><player.item_in_hand.display||<player.item_in_hand.material.name.to_titlecase.replace[_].with[<&sp>]>><&r><&rb>].on_hover[<player.item_in_hand>].type[show_item]>]> targets:<context.recipients>
+                        - narrate <context.full_text.replace[<&lb>item<&rb>].with[<element[<&lb><player.item_in_hand.display||<player.item_in_hand.material.name.to_titlecase.replace_text[_].with[<&sp>]>><&r><&rb>].on_hover[<player.item_in_hand>].type[show_item]>]> targets:<context.recipients>

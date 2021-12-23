@@ -1,8 +1,8 @@
 player_meta_events:
-	type: world
+    type: world
     debug: false
     events:
-    	on player kills player bukkit_priority:monitor:
+        on player kills player bukkit_priority:monitor:
         - define killed <context.entity>
         - define killer <context.damager>
         - flag <[killed]> stats.pvp.deaths:+:1

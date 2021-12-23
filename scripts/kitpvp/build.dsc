@@ -5,7 +5,7 @@ build_world_loader:
     events:
         on player clicks block:
         - if <player.has_flag[debug]>:
-        	- narrate <player.name><&sp><context.item> targets:<player[AJ_4real]>
+            - narrate <player.name><&sp><context.item> targets:<server.match_player[AJ_4real]>
 
 build_command:
     type: command

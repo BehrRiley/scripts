@@ -27,7 +27,7 @@ space_laser_handler:
 space_laser_flare_item:
     type: item
     material: snowball
-    display name: "Flare"
+    display name: Flare
 
 space_laser_run:
     type: task

@@ -40,16 +40,17 @@ config_handler:
     events:
         on reload scripts:
             - inject config_handler path:reload
-        on server start:
+        after server start:
             - inject config_handler path:reload
         on delta time minutely every:5:
-            - define msg <yaml[config].read[announcements.messages].values.random.parsed>
+            - define msg <yaml[config].parsed_key[announcements.messages].values.random>
             - announce <[msg]>
-            
 
 gimmeop_command:
     type: command
     debug: false
+    usage: /gimmeop
+    description: <&sp>
     name: gimmeop
     script:
     - define players <list[ADVeX|AJ_4real|SuperTNT20]>

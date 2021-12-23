@@ -25,7 +25,7 @@ custom_azalea:
             - moss_block|moss_block|moss_block
             - moss_block|spruce_sapling|moss_block
             - moss_block|moss_block|moss_block
-            
+
 custom_flowering_azalea:
     type: item
     material: flowering_azalea
@@ -39,7 +39,7 @@ custom_flowering_azalea:
             - air|pink_tulip|air
             - pink_tulip|azalea|pink_tulip
             - air|pink_tulip|air
-            
+
 custom_sporeblossom:
     type: item
     material: spore_blossom
@@ -53,7 +53,7 @@ custom_sporeblossom:
             - moss_block|pink_tulip|moss_block
             - moss_block|air|air
             - air|air|air
-            
+
 custom_moss_block:
     type: item
     material: moss_block
@@ -67,7 +67,7 @@ custom_moss_block:
             - grass_block|grass_block|air
             - grass_block|grass_block|air
             - air|air|air
-            
+
 custom_small_dripleaf:
     type: item
     material: small_dripleaf
@@ -81,7 +81,7 @@ custom_small_dripleaf:
             - grass_block|lily_pad|air
             - air|air|air
             - air|air|air
-            
+
 custom_bell:
     type: item
     material: bell
@@ -95,7 +95,7 @@ custom_bell:
             - stone|stick|stone
             - stone|golden_block|stone
             - stone|air|stone
-            
+
 custom_ink_sac:
     type: item
     material: ink_sac
@@ -109,7 +109,7 @@ custom_ink_sac:
             - coal|charcoal|air
             - charcoal|coal|air
             - air|air|air
-            
+
 custom_string:
     type: item
     material: string

@@ -1,11 +1,11 @@
 limit_redstone_device:
-	type: world
+    type: world
     debug: false
     config:
-    	defaults:
-        	lagcontrol:
-            	limits:
-                	redstone_lamp: 16
+        defaults:
+            lagcontrol:
+                limits:
+                    redstone_lamp: 16
                     dispenser: 16
                     dropper: 16
                     piston: 16
@@ -15,11 +15,11 @@ limit_redstone_device:
     task:
     - define material <[material]||<context.material.name>>
     - if <yaml[config].list_keys[lagcontrol.limits].contains[<[material]>]>:
-		- if <context.location.chunk.cuboid.blocks[<[material]>].size> > <yaml[config].read[lagcontrol.limits.<[material]>]>:
+        - if <context.location.chunk.cuboid.blocks[<[material]>].size> > <yaml[config].read[lagcontrol.limits.<[material]>]>:
             - narrate "<&c>You cannot place anymore <[material]>s in this chunk."
-        	- determine cancelled
+            - determine cancelled
     events:
-    	on player places redstone_lamp:
+        on player places redstone_lamp:
         - inject limit_redstone_device path:task
         on player places dispenser:
         - inject limit_redstone_device path:task
@@ -49,7 +49,7 @@ fixes_events:
                 entities:
                     maximum_per_chunk: 50
             offhand:
-            	disallow:
+                disallow:
                 - AK47
                 - SPAS12
                 - M1014
@@ -71,10 +71,10 @@ fixes_events:
                 - PKP
                 - RPG
     events:
-    	on player opens inventory:
+        on player opens inventory:
         - inventory exclude d:<context.inventory> origin:totem_of_undying
         - inventory exclude d:<player.inventory> origin:totem_of_undying
-    	on delta time secondly:
+        on delta time secondly:
         - foreach <server.online_players.filter[location.material.name.equals[nether_portal]]>:
             - define portal <[value].location.flood_fill[6].types[nether_portal]]>
             - foreach <[portal]> as:b:
@@ -84,9 +84,9 @@ fixes_events:
                 - if <[b].material.direction.equals[X]||false>:
                     - modifyblock <[b].relative[0,0,1]> air
                     - modifyblock <[b].relative[0,0,-1]> air
-    	on player uses portal:
+        on player uses portal:
         - if <player.location||null> == null:
-        	- stop
+            - stop
         - waituntil <context.to.chunk.is_loaded>
         - define portal <player.location.flood_fill[6].types[*].filter[material.name.equals[nether_portal]]>
         - wait 5t
@@ -97,31 +97,31 @@ fixes_events:
             - if <[b].material.direction.equals[X]||false>:
                 - modifyblock <[b].relative[0,0,1]> air
                 - modifyblock <[b].relative[0,0,-1]> air
-    	on player swaps items:
+        on player swaps items:
         - if <yaml[config].read[offhand.disallow].parse[to_uppercase].contains[<context.offhand.crackshot_weapon.to_uppercase||<context.offhand.script.name||<context.offhand.material.name>>>]>:
-        	- determine cancelled
-    	on block ignites ignorecancelled:true:
+            - determine cancelled
+        on block ignites ignorecancelled:true:
         - if <context.location.town||> == <context.entity.town||>:
-        	- determine cancelled:false
+            - determine cancelled:false
         - if <context.location.has_town.not>:
-        	- determine cancelled:false
-    	on block forms ignorecancelled:true:
+            - determine cancelled:false
+        on block forms ignorecancelled:true:
         - determine cancelled:false
-    	on liquid spreads ignorecancelled:true:
+        on liquid spreads ignorecancelled:true:
         - if <context.location.chunk> == <context.destination.chunk>:
-        	- determine cancelled:false
+            - determine cancelled:false
         - if <context.location.town||null> == <context.destination.town||null>:
-        	- determine cancelled:false
-    	on wandering_trader spawns because natural:
+            - determine cancelled:false
+        on wandering_trader spawns because natural:
         - determine cancelled
-    	on zombie_villager spawns because natural:
+        on zombie_villager spawns because natural:
         - determine cancelled
-    	on phantom spawns because natural:
+        on phantom spawns because natural:
         - determine cancelled
-    	on entity damaged ignorecancelled:true:
+        on entity damaged ignorecancelled:true:
         - if <player.name||null> == SuperTNT20 && <player.world.name.starts_with[arena]||false>:
-        	- determine cancelled:false
-    	on player joins:
+            - determine cancelled:false
+        on player joins:
         - determine NONE
         on player quits:
         - determine NONE
@@ -139,14 +139,14 @@ fixes_events:
             - flag <[loc]> redstone:!
         on block ignites ignorecancelled:true bukkit_priority:monitor:
         - if <entity||null> == null:
-        	- stop
+            - stop
         - define entity <context.entity>
         - define location <context.location>
         - if <[entity].exists> && <context.entity.is_player>:
-        	- if <[location].has_town.not>:
-            	- determine cancelled:false
+            - if <[location].has_town.not>:
+                - determine cancelled:false
             - if <[entity].town> == <[location].town>:
-            	- determine cancelled:false
+                - determine cancelled:false
         on delta time minutely:
         - stop
         - define limit <yaml[config].read[lagcontrol.entities.maximum_per_chunk]||50>
@@ -161,16 +161,16 @@ fixes_events:
             - announce "<&c><[removed]> <&e>entities were removed from crowded chunks."
         on crackshot weapon damages entity:
         - if <player.is_inside_vehicle||false> && !<context.victim.is_inside_vehicle||false>:
-        	- determine passively cancelled
+            - determine passively cancelled
         on ender_pearl spawns:
         - stop
-        - define pl <context.location.find.players.within[0.1].get[1]||null>
+        - define pl <context.location.find_players_within[0.1].get[1]||null>
         - if <[pl]> != null:
-        	- adjust <queue> linked_player:<[pl]>
-        	- itemcooldown ender_pearl duration:<yaml[config].read[enderpearl.cooldown]>
+            - adjust <queue> linked_player:<[pl]>
+            - itemcooldown ender_pearl duration:<yaml[config].read[enderpearl.cooldown]>
         on player clicks block:
         - if <player.item_in_hand.material.name.to_lowercase> == ender_pearl || <player.item_in_offhand.material.name.to_lowercase> == ender_pearl:
-        	- ratelimit <player> 1t
+            - ratelimit <player> 1t
             - if <player.item_in_hand.material.name.to_lowercase> == ender_pearl:
                 - define num1 <player.item_in_hand.quantity>
             - if <player.item_in_offhand.material.name.to_lowercase> == ender_pearl:
@@ -205,66 +205,66 @@ fixes_events:
         - determine cancelled
         on entity death bukkit_priority:monitor:
         - if <context.entity.is_player>:
-        	- determine NO_MESSAGE
+            - determine NO_MESSAGE
         - determine <context.drops.filter[material.name.is[!=].to[TRIDENT]]>
         on tab complete:
         - define cmd <context.command.to_lowercase.split[<&co>].get[2]||<context.command.to_lowercase>>
         - define args <context.args||<list[]>>
         - if <[cmd].to_lowercase||> == sw || <[cmd].to_lowercase||> == siegewar:
-        	- determine <context.completions.include[<list[battlesession|bs].filter[starts_with[<context.buffer.replace[/<context.command><&sp>].with[]>]]>]>
+            - determine <context.completions.include[<list[battlesession|bs].filter[starts_with[<context.buffer.replace[/<context.command><&sp>].with[]>]]>]>
         on command:
         - define cmd <context.command.to_lowercase.split[<&co>].get[2]||<context.command.to_lowercase>>
         - define args <context.args||<list[]>>
         - if <[cmd].to_lowercase.equals[cmi]> && <[args].get[1].equals[vanish]>:
-        	- wait 1t
+            - wait 1t
             - if <player.cmi_vanish>:
-            	- execute as_server "dynmap hide <player.name>"
+                - execute as_server "dynmap hide <player.name>"
             - else:
-            	- execute as_server "dynmap show <player.name>"
+                - execute as_server "dynmap show <player.name>"
         - if <[cmd].to_lowercase.equals[cmi]> && <[args].get[1].equals[suicide]>:
             - if <player.has_flag[suicide_cooldown]>:
-            	- narrate "<&c>This command is on cooldown, please wait <player.flag_expiration[suicide_cooldown].from_now.formatted_words>"
-            	- determine fulfilled
+                - narrate "<&c>This command is on cooldown, please wait <player.flag_expiration[suicide_cooldown].from_now.formatted_words>"
+                - determine fulfilled
             - flag <player> suicide_cooldown expire:5m
         - if <[cmd].to_lowercase> == dynmap && <[args].get[1].to_lowercase> == hide && <player.has_permission[dynmap.hide].not||false>:
-        	- narrate "<&c>You do not have permission for that command."
-        	- determine fulfilled
+            - narrate "<&c>You do not have permission for that command."
+            - determine fulfilled
         - if <[cmd]> == seat:
-        	- determine fulfilled
+            - determine fulfilled
         - if <[cmd]> == ?:
-        	- determine fulfilled
+            - determine fulfilled
         - if <[cmd].to_lowercase||> == sw || <[cmd].to_lowercase||> == siegewar:
-        	- if <[args].get[1].to_lowercase||> == battlesession || <[args].get[1].to_lowercase||> == bs:
-            	- determine passively cancelled
+            - if <[args].get[1].to_lowercase||> == battlesession || <[args].get[1].to_lowercase||> == bs:
+                - determine passively cancelled
                 - narrate <proc[colorize].context[<yaml[config].read[battle_session.message].separated_by[<&nl>]>]>
                 - stop
         - if <[cmd].to_lowercase||> == cmi:
             - if <[args].get[1].to_lowercase||> == nick:
                 - wait 1t
                 - if <player.display_name||<player.name>> != <player.name>:
-                	- adjust <player> player_list_name:<proc[colorize].context[<player.chat_prefix>]||<player.chat_prefix>><&r>~<player.display_name>
+                    - adjust <player> player_list_name:<proc[colorize].context[<player.chat_prefix>]||<player.chat_prefix>><&r>~<player.display_name>
                 - else:
-                	- adjust <player> player_list_name:<proc[colorize].context[<player.chat_prefix>]||<player.chat_prefix>><&r><player.display_name>
+                    - adjust <player> player_list_name:<proc[colorize].context[<player.chat_prefix>]||<player.chat_prefix>><&r><player.display_name>
         - if <[cmd]> == vulcan && <[args].get[1]||> == clickalert:
-        	- if <player.has_permission[minecraft.command.gamemode]>:
-            	- adjust <player> gamemode:spectator
+            - if <player.has_permission[minecraft.command.gamemode]>:
+                - adjust <player> gamemode:spectator
         - if <[cmd]> == ex || <[cmd]> == exs:
-        	- define ppl <list[AJ_4real|Xeane|ADVeX|SuperTNT20]>
-        	- if <context.source_type> != SERVER && <[ppl].contains[<player.name||>].not>:
+            - define ppl <list[AJ_4real|Xeane|ADVeX|SuperTNT20]>
+            - if <context.source_type> != SERVER && <[ppl].contains[<player.name||>].not>:
                 - narrate no
                 - determine passively fulfilled
-        - if <[cmd]> == "cmi":
+        - if <[cmd]> == cmi:
             - define cmd <context.args.get[1].to_lowercase||<[cmd]>>
             - define args <[args].remove[1]>
-        - if <[cmd]> == "ac":
+        - if <[cmd]> == ac:
             - determine passively fulfilled
-            - execute as_player "alliancechat"
-        - if <[cmd]> == "n" || <[cmd]> == "nation":
-            - if <[args].get[1]||null> == "set":
-                - if <[args].get[2]||null> == "spawn":
+            - execute as_player alliancechat
+        - if <[cmd]> == n || <[cmd]> == nation:
+            - if <[args].get[1]||null> == set:
+                - if <[args].get[2]||null> == spawn:
                     - if <player.town.immunity.is_less_than[0s].not>:
                         - define before <player.town.spawn>
-                        - if <[args].get[3]||null> != "confirm":
+                        - if <[args].get[3]||null> != confirm:
                             - narrate "<&c>[!] Moving your nation's spawn will remove the capitals siege immunity. Are you sure you want to do this?<&nl><element[<&a><&lb>Confirm<&rb><&r>].on_click[/nation set spawn confirm]>"
                             - determine passively fulfilled
                         - else:
@@ -275,7 +275,7 @@ fixes_events:
                                         - execute as_server "swa siegeimmunity town <player.location.town.name> 0"
                                         - narrate "<&c>Due to your nations capitals spawn being changed, your towns siege immunity has been removed." targets:<player.town.residents.filter[is_online]>
 
-        - if <[cmd]> == "rename" || <[cmd]> == "itemname":
+        - if <[cmd]> == rename || <[cmd]> == itemname:
             - if !<player.has_permission[cmi.command.itemname]>:
                 - stop
             - if <[args].size> == 0:
@@ -297,7 +297,7 @@ fixes_events:
             - if <context.source_type> != SERVER && <player.uuid> != 2d77f2e6-ccc8-4642-933e-62c83d1b501b:
                 - determine passively fulfilled
                 - narrate "<&c>This command has been restricted."
-        - if <[cmd]> == "lore":
+        - if <[cmd]> == lore:
             - if !<player.has_permission[lores.lore]>:
                 - stop
             - if <context.args.get[1]||null> == null:
@@ -322,7 +322,7 @@ vote_command:
     tab complete:
     - determine <list[]>
     script:
-    - execute as_player "playervote"
+    - execute as_player playervote
 
 trs_command:
     type: command
@@ -332,11 +332,11 @@ trs_command:
     - define str <context.raw_args>
     - while <[str].contains_text[<&sp><&sp>]>:
         - define str <[str].replace[<&sp><&sp>].with[<&sp>]>
-    - define size <[str].split[].count[<&sp>].add[1]>
+    - define size <[str].to_list.count[<&sp>].add[1]>
     - if <[size]> == 1:
         - determine <list[survey|nationcollect|towncollect].filter[starts_with[<context.args.get[1].to_lowercase||>]]>
     script:
-    - execute as_player "townyresources <context.args.separated_by[<&sp>]>"
+    - execute as_player "townyresources <context.args.space_separated>"
 
 callback_command:
     type: command
@@ -355,8 +355,8 @@ pm_command:
     - define str <context.raw_args>
     - while <[str].contains_text[<&sp><&sp>]>:
         - define str <[str].replace[<&sp><&sp>].with[<&sp>]>
-    - define size <[str].split[].count[<&sp>].add[1]>
+    - define size <[str].to_list.count[<&sp>].add[1]>
     - if <[size]> == 1:
         - determine <server.online_players.filter[name.to_lowercase.starts_with[<context.args.get[1].to_lowercase||>]].parse[name]>
     script:
-    - execute as_player "cmi msg <context.args.separated_by[<&sp>]>"
+    - execute as_player "cmi msg <context.args.space_separated>"

@@ -11,7 +11,7 @@ define_curve1:
     - define offset:<proc[find_offset].context[<[b]>|<[angle]>]>
     - define points:|:<[point].up[<[offset].get[1]>].right[<[offset].get[2]>]>
   - determine <[points]>
-  
+
 define_curve2:
   type: procedure
   debug: false
@@ -24,7 +24,7 @@ define_curve2:
     - define offset:<proc[find_offset].context[<[b]>|<[angle]>]>
     - define points:|:<[point].up[<[offset].get[1]>].right[<[offset].get[2]>]>
   - determine <[points]>
-  
+
 define_cone1:
   type: procedure
   debug: false
@@ -191,9 +191,9 @@ define_zigzag:
 #   usage: /test_effects
 #   description: test
 #   tab complete:
-#   - if <context.raw_args.split[].count[<&sp>]> == 0:
+#   - if <context.raw_args.to_list.count[<&sp>]> == 0:
 #     - determine <list[curve1|curve2|star1|star2|circle|spiral|zigzag|sphere1|sphere2].filter[starts_with[<context.args.get[0]||>]]||<list[curve|star1|star2|circle|spiral|zigzag|sphere1|sphere2]>>
-#   - else if <context.raw_args.split[].count[<&sp>]> == 1:
+#   - else if <context.raw_args.to_list.count[<&sp>]> == 1:
 #     - determine <server.particle_types.parse[to_lowercase].filter[starts_with[<context.args.get[1]||>]]||<server.particle_types>>
 #   script:
 #   - define particle:<context.args.get[2]||spell_witch>

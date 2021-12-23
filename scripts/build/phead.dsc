@@ -10,16 +10,16 @@ phead_command:
                 no_inventory_space: "<&c>Please make room in your inventory."
             phead:
                 banned_heads:
-                - "CMI-Fake-Operator"
+                - CMI-Fake-Operator
     tab complete:
     - if !<player.has_permission[]>:
         - stop
     - define str <context.raw_args>
     - while <[str].contains_text[<&sp><&sp>]>:
-        - define str <[str].replace[<&sp><&sp>].with[<&sp>]>
+        - define str <[str].replace_text[<&sp><&sp>].with[<&sp>]>
     - define args <[str].split[<&sp>]>
     - if <[args].get[1].length||0> > 2:
-        - define size <[str].split[].count[<&sp>].add[1]>
+        - define size <[str].to_list.count[<&sp>].add[1]>
         - if <[size]> == 1:
             - determine <server.offline_players.filter[name.to_lowercase.starts_with[<context.args.get[1].to_lowercase||>]].include[<server.online_players.filter[name.to_lowercase.starts_with[<context.args.get[1].to_lowercase||>]]>].parse[name]>
     script:
@@ -31,9 +31,9 @@ phead_command:
         - stop
     - define str <context.raw_args>
     - while <[str].contains_text[<&sp><&sp>]>:
-        - define str <[str].replace[<&sp><&sp>].with[<&sp>]>
+        - define str <[str].replace_text[<&sp><&sp>].with[<&sp>]>
     - define args <[str].split[<&sp>]>
-    - define size <[str].split[].count[<&sp>].add[1]>
+    - define size <[str].to_list.count[<&sp>].add[1]>
     - if <[size].is_less_than[1]>:
         - narrate <yaml[config].parsed_key[messages.not_enough_args]>
         - stop

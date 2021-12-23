@@ -26,10 +26,10 @@ colorize:
         - if <element[<[location]||null>].equals[null]>:
             - define location <[player].location>
         - foreach <script.list_keys[placeholders.player]> as:k:
-            - define text <[text].replace[<&pc><[k]><&pc>].with[<script.data_key[placeholders.player.<[k]>].parsed>]||>
+            - define text <[text].replace_text[<&pc><[k]><&pc>].with[<script.data_key[placeholders.player.<[k]>].parsed>]||>
     - if !<element[<[location]||null>].equals[null]>:
         - foreach <script.list_keys[placeholders.location]> as:k:
-            - define text <[text].replace[<&pc><[k]><&pc>].with[<script.data_key[placeholders.location.<[k]>].parsed>]||>
+            - define text <[text].replace_text[<&pc><[k]><&pc>].with[<script.data_key[placeholders.location.<[k]>].parsed>]||>
     - foreach <script.list_keys[placeholders.global]> as:k:
-        - define text <[text].replace[<&pc><[k]><&pc>].with[<script.data_key[placeholders.global.<[k]>].parsed>]||>
+        - define text <[text].replace_text[<&pc><[k]><&pc>].with[<script.data_key[placeholders.global.<[k]>].parsed>]||>
     - determine <[text].parse_color[&]>

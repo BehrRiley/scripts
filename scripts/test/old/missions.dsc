@@ -3,9 +3,9 @@ missions_events:
     debug: false
     reload:
     - if !<server.list_files[data].contains[missions.yml]>:
-    	- yaml create id:missions
+        - yaml create id:missions
     - else:
-    	- yaml id:missions load:data/missions.yml
+        - yaml id:missions load:data/missions.yml
     - yaml id:missions savefile:data/missions.yml
     events:
         on reload scripts:
@@ -46,13 +46,13 @@ missions_events:
         - if !<[list].contains_any[<context.inventory.inventory_type>]>:
             - stop
         - if <context.inventory.location||null> != null:
-        	- define location <context.inventory.location.block>
-            - note <[location]> "as:<context.inventory.inventory_type>_<[location].simple>_<player>"
+            - define location <context.inventory.location.block>
+            - note <[location]> as:<context.inventory.inventory_type>_<[location].simple>_<player>
             - wait 5m
-            - note remove "as:<context.inventory.inventory_type>_<[location].simple>_<player>"
+            - note remove as:<context.inventory.inventory_type>_<[location].simple>_<player>
         on player breaks block:
         - if <context.material.name> == furnace:
-        	- note remove as:<context.location.block.note_name>
+            - note remove as:<context.location.block.note_name>
         on brewing stand brews:
         - if <context.location.note_name||null> != null:
             - foreach <list[1|2|3]> as:i:
@@ -101,7 +101,7 @@ missions_events:
         - if <context.entity.is_player>:
             - define player <context.entity>
             - define task enchant_item
-            - define context <context.item.material.name.replace[golden_].with[gold_]>
+            - define context <context.item.material.name.replace_text[golden_].with[gold_]>
             - define amount 1
             - inject process_mission
         on player breaks held item:
@@ -135,7 +135,7 @@ missions_events:
         - define context <context.item.material.name||null>
         - define amount 1
         - if <[context].equals[null]>:
-        	- stop
+            - stop
         - inject process_mission
         on player shears sheep:
         - define player <player>
@@ -171,19 +171,19 @@ missions_events:
         - define context <context.weapon>
         - define amount <context.damage>
         - inject process_mission
-        
+
         on player clicks block:
         - if <context.item.script.name||> != mission_item:
-        	- stop
+            - stop
         - define req <context.item.flag[requirement]>
         - define prog <context.item.flag[progress]>
         - if <[req].is_less_than_or_equal_to[<[prog]>]>:
-        	- define item <context.item>
+            - define item <context.item>
             - define tier <[item].flag[tier]>
             - if <player.inventory.slot[<player.held_item_slot>]> != <context.item>:
-            	- stop
+                - stop
             - foreach <yaml[missions].read[missions.rewards.<[tier]>]> as:cmd:
-            	- execute as_server <[cmd].replace[<&pc>player_name<&pc>].with[<player.name>]>
+                - execute as_server <[cmd].replace[<&pc>player_name<&pc>].with[<player.name>]>
             - narrate "<&e>You have completed a <[item].display>"
             - title "title:<&e>Mission Complete!" "subtitle:You have completed a <[item].display>"
             - inventory set d:<player.inventory> slot:<player.held_item_slot> o:<item[air]>
@@ -194,7 +194,7 @@ test_missions_command:
     debug: false
     script:
     - if !<player.has_permission[missions.command]>:
-    	- narrate "<&c>You do not have permission for that command."
+        - narrate "<&c>You do not have permission for that command."
         - stop
     - give <proc[get_mission_item]>
 
@@ -204,9 +204,9 @@ get_mission_item:
     definitions: tier|type
     script:
     - if <[tier].exists.not>:
-    	- foreach <yaml[missions].list_keys[missions.weights.tiers]> as:k:
-        	- define tier_options:|:<[k].repeat_as_list[<yaml[missions].read[missions.weights.tiers.<[k]>]>]>
-    	- define tier <[tier_options].random>
+        - foreach <yaml[missions].list_keys[missions.weights.tiers]> as:k:
+            - define tier_options:|:<[k].repeat_as_list[<yaml[missions].read[missions.weights.tiers.<[k]>]>]>
+        - define tier <[tier_options].random>
     - define item <item[mission_item]>
     - if <[type].exists.not>:
         - foreach <yaml[missions].list_keys[missions.requirements]> as:t:
@@ -222,11 +222,11 @@ get_mission_item:
         - define min <yaml[missions].read[missions.requirements.<[type]>.<[tier]>.min]>
         - define max <yaml[missions].read[missions.requirements.<[type]>.<[tier]>.max]>
     - else:
-    	- define context <yaml[missions].list_keys[missions.requirements.<[type]>].random[1].get[1]||null>
+        - define context <yaml[missions].list_keys[missions.requirements.<[type]>].random[1].get[1]||null>
         - define min <yaml[missions].read[missions.requirements.<[type]>.<[context]>.<[tier]>.min]>
         - define max <yaml[missions].read[missions.requirements.<[type]>.<[context]>.<[tier]>.max]>
     - if <util.random.int[<[min]>].to[<[max]>]||null> == null:
-    	- determine <proc[get_mission_item].context[<[tier]>]>
+        - determine <proc[get_mission_item].context[<[tier]>]>
     - define item <[item].with[display=<proc[colorize].context[<yaml[missions].read[missions.strings.tiers.<[tier]>]>]>]>
     - define item <[item].with[flag=type:<[type]>]>
     - define item <[item].with[flag=context:<[context]>]>
@@ -237,12 +237,12 @@ get_mission_item:
     - determine <proc[build_mission_lore].context[<[item]>]>
 
 build_mission_lore:
-	type: procedure
+    type: procedure
     definitions: item
     debug: false
     script:
     - define lore <list[<yaml[missions].read[missions.strings.objective]>]>
-    - define lore <[lore].include[<yaml[missions].read[missions.strings.types.<[item].flag[type]>.titlecase].replace[<&pc>context<&pc>].with[<[item].flag[context]>].replace[_].with[<&sp>]>]>
+    - define lore <[lore].include[<yaml[missions].read[missions.strings.types.<[item].flag[type]>.titlecase].replace[<&pc>context<&pc>].with[<[item].flag[context]>].replace_text[_].with[<&sp>]>]>
     - define lore <[lore].include[<yaml[missions].read[missions.strings.types.<[item].flag[type]>.base].replace[<&pc>current<&pc>].with[<[item].flag[progress]>].replace[<&pc>requirement<&pc>].with[<[item].flag[requirement]>]>]>
     - define item <[item].with[lore=<[lore].parse_tag[<proc[colorize].context[<&f><[parse_value]>]>]>]>
     - determine <[item]>
@@ -252,21 +252,21 @@ process_mission:
     debug: false
     script:
     - if <[player].inventory.contains_item[mission_item]>:
-    	- adjust <queue> linked_player:<[player]>
+        - adjust <queue> linked_player:<[player]>
         - foreach <[player].inventory.map_slots.keys||<list[]>> as:s:
             - define item <[player].inventory.slot[<[s]>]>
             - if <[item].script.name||null> != mission_item:
                 - foreach next
             - if <[item].flag[context]||> != <[context]> && <[item].flag[type]||> != gain_xp:
-            	- foreach next
+                - foreach next
             - if <[item].flag[type]||> != <[task]>:
-            	- foreach next
+                - foreach next
             - if <[item].flag[progress].add[1].is_more_than[<[item].flag[requirement]>]>:
-            	- foreach next
+                - foreach next
             - define item <[item].with[flag=progress:<[item].flag[progress].add[<[amount]>]>]>
             - define item <proc[build_mission_lore].context[<[item]>]>
             - if <[item].flag[requirement]> == <[item].flag[progress]>:
-            	- narrate "<&e>Mission has reached its goal." targets:<player>
+                - narrate "<&e>Mission has reached its goal." targets:<player>
                 - flag <[player]> missions.completed:+:1
                 - define i <[player].flag[missions.completed]>
                 - townymeta <[player]> key:missions.completed "label:Missions Completed" value:<[i]>

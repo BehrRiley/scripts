@@ -6,27 +6,27 @@ travel_command:
     - determine <yaml[earth_map].list_keys[earth].filter[to_lowercase.starts_with[<context.args.get[1].to_lowercase||>]]>
     script:
     - if <context.source_type> != PLAYER:
-    	- narrate "<&c>This command can only be executed by a player."
+        - narrate "<&c>This command can only be executed by a player."
         - stop
     - if <context.args.get[1]||> == set && <context.args.get[2]||null> != null && <context.args.get[3]||null> != null:
-    	- if !<player.has_permission[travel.command.set]>:
-    		- narrate "<&c>You do not have permission for that command."
-    		- stop
-		- yaml id:earth_map set earth.<context.args.get[2]>.<context.args.get[3]>:<player.location>
+        - if !<player.has_permission[travel.command.set]>:
+            - narrate "<&c>You do not have permission for that command."
+            - stop
+        - yaml id:earth_map set earth.<context.args.get[2]>.<context.args.get[3]>:<player.location>
         - narrate "set point <context.args.get[3]> of <context.args.get[2]> to <player.location.simple.formatted>"
         - inject travel_events path:save
         - stop
     - else:
-    	- if <context.args.get[1].exists>:
+        - if <context.args.get[1].exists>:
             - if !<yaml[earth_map].list_keys[earth].contains[<context.args.get[1]>]>:
                 - narrate "<&c>Location not found."
                 - stop
             - else:
-            	- define continent <context.args.get[1]>
+                - define continent <context.args.get[1]>
         - else:
-        	- define continent <yaml[earth_map].list_keys[earth].random>
+            - define continent <yaml[earth_map].list_keys[earth].random>
         - if <player.has_flag[no_travel_command]>:
-        	- narrate "<&c>You cannot use this command for <player.flag_expiration[no_travel_command].from_now.formatted>."
+            - narrate "<&c>You cannot use this command for <player.flag_expiration[no_travel_command].from_now.formatted>."
             - stop
         - define continent <context.args.get[1]||>
         - inject get_random_point_task
@@ -38,13 +38,13 @@ travel_command:
         - flag <player> no_fall:!
 
 get_random_point_task:
-	type: procedure
+    type: procedure
     debug: false
     definitions: continent
     script:
     - define continent <[continent]||<yaml[earth_map].list_keys[earth].random>>
     - if <yaml[earth_map].list_keys[earth].contains[<[continent]>].not>:
-    	- define continent <yaml[earth_map].list_keys[earth].random>
+        - define continent <yaml[earth_map].list_keys[earth].random>
     - define world <yaml[earth_map].read[earth.<[continent]>.<yaml[earth_map].list_keys[earth.<[continent]>].first>].world.name>
     - define x_range <yaml[earth_map].list_keys[earth.<[continent]>].parse_tag[<yaml[earth_map].read[earth.<[continent]>.<[parse_value]>]>].parse[block.x]>
     - define z_range <yaml[earth_map].list_keys[earth.<[continent]>].parse_tag[<yaml[earth_map].read[earth.<[continent]>.<[parse_value]>]>].parse[block.z]>
@@ -55,14 +55,14 @@ get_random_point_task:
         - define poly <[poly].with_corner[<yaml[earth_map].read[earth.<[continent]>.<[k]>]>]>
     - define l <location[<util.random.int[<[x_range].lowest>].to[<[x_range].highest>]>,254,<util.random.int[<[z_range].lowest>].to[<[z_range].highest>]>,<[world]>]>
     - while !<[poly].contains[<[l]>]>:
-    	- define l <location[<util.random.int[<[x_range].lowest>].to[<[x_range].highest>]>,254,<util.random.int[<[z_range].lowest>].to[<[z_range].highest>]>,<[world]>]>
+        - define l <location[<util.random.int[<[x_range].lowest>].to[<[x_range].highest>]>,254,<util.random.int[<[z_range].lowest>].to[<[z_range].highest>]>,<[world]>]>
         - wait 1t
     - chunkload <[l].chunk>
     - waituntil <[l].chunk.is_loaded>
     - define loc <[l].highest.up[1]>
 
 get_random_point:
-	type: procedure
+    type: procedure
     debug: false
     definitions: continent
     script:
@@ -77,14 +77,14 @@ get_random_point:
         - define poly <[poly].with_corner[<yaml[earth_map].read[earth.<[continent]>.<[k]>]>]>
     - define l <location[<util.random.int[<[x_range].lowest>].to[<[x_range].highest>]>,254,<util.random.int[<[z_range].lowest>].to[<[z_range].highest>]>,<[world]>]>
     - while !<[poly].contains[<[l]>]>:
-    	- define l <location[<util.random.int[<[x_range].lowest>].to[<[x_range].highest>]>,254,<util.random.int[<[z_range].lowest>].to[<[z_range].highest>]>,<[world]>]>
+        - define l <location[<util.random.int[<[x_range].lowest>].to[<[x_range].highest>]>,254,<util.random.int[<[z_range].lowest>].to[<[z_range].highest>]>,<[world]>]>
         - define i <[i].add[1]||1>
         - if <[i].is_more_than[50]>:
-        	- stop
+            - stop
     - determine <[l]>
 
 travel_events:
-	type: world
+    type: world
     debug: false
     save:
     - yaml id:earth_map savefile:data/earth_map.yml
@@ -94,7 +94,7 @@ travel_events:
     - else:
         - yaml id:earth_map create
     events:
-    	on player death:
+        on player death:
         - define location <player.location>
         - wait 1t
         - adjust <player> respawn
@@ -107,7 +107,7 @@ travel_events:
         - waituntil <player.location.below[0.01].material.is_solid||false>
         - wait 1s
         - flag <player> no_fall:!
-    	on server start:
+        on server start:
         - inject travel_events path:load
         on reload scripts:
         - inject travel_events path:load

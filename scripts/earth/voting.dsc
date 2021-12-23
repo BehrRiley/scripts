@@ -181,37 +181,38 @@ voting_startup:
     - inject voting_startup path:load
 
 voting_events:
-  type: world
-  debug: false
-  events:
-    on votifier vote:
-      - define service <context.service.replace_text[.].with[_]>
-      - define player <server.match_player[<context.username>].if_null[null]>
-      - if <[player]> == null:
-        - stop
-      - flag <[player]> voted duration:24h
-      - flag <[player]> votes.service.<[service]>:+:1
-      - flag <[player]> votes.month.<util.time_now.start_of_month.epoch_millis.div[1000]>.service.<[service]>:+:1
-      - define total_votes <[player].flag[votes.service].keys.parse_tag[<[player].flag[votes.service.<[parse_value]>]>].sum||0>
-      - define tier <yaml[voting_rewards].list_keys[tiers].filter_tag[<yaml[voting_rewards].read[tiers.<[filter_value]>].is_less_than_or_equal_to[<[total_votes]>]>].highest>
-      - foreach <yaml[voting_rewards].list_keys[rewards.tier.<[tier]>.every]> as:k:
-        - if <[total_votes].mod[<[k]>]> == 0:
-          - if <yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.message]||null> != null:
-            - define message <proc[colorize].context[<yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.message].separated_by[<&nl>]>|<[player]>].replace_text[<&pc>player_tier<&pc>].with[<[tier]>].replace_text[<&pc>service<&pc>].with[<context.service>]||null>
-            - if <[message]> != null:
-              - narrate <[message]> targets:<[player]>
-          - if <yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.announcement]||null> != null:
-            - define announcement <proc[colorize].context[<yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.announcement].separated_by[<&nl>]||null>|<[player]>].replace_text[<&pc>player_tier<&pc>].with[<[tier]>].replace_text[<&pc>service<&pc>].with[<context.service>]||null>
-            - if <[announcement]> != null:
-              - announce <[announcement]>
-        - foreach <yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.commands]> as:command:
-              - execute as_server <[command].replace_text[<&pc>player_name<&pc>].with[<[player].name>]>
-      - flag server votes:+:1
-      - foreach <yaml[voting_rewards].list_keys[rewards.party.every]> as:k:
-        - if <server.flag[votes].mod[<[k]>]> == 0:
-            - foreach <server.online_players.filter[has_flag[voted]]> as:pl:
-              - foreach <yaml[voting_rewards].read[rewards.party.every.<[k]>.commands.players_who_voted]> as:cmd:
-                  - execute as_server <[cmd].replace_text[<&pc>player_name<&pc>].with[<[pl].name>]>
-                  - define message <proc[colorize].context[<yaml[voting_rewards].read[rewards.party.every.<[k]>.message.players_who_voted].separated_by[<&nl>]>|<[pl]>]||null>
-                  - narrate <[message]> targets:<[pl]>
-      - yaml id:player_<[player].uuid> savefile:data/players/<[player].uuid>.yml
+    type: world
+    debug: false
+    events:
+        on votifier vote:
+        - define service <context.service.replace_text[.].with[_]>
+        - if <player[<context.username>]||null> == null:
+            - stop
+        - define player <server.match_player[<context.username>]>
+        - adjust <queue> linked_player:<[player]>
+        - flag <[player]> voted duration:24h
+        - flag <[player]> votes.service.<[service]>:+:1
+        - flag <[player]> votes.month.<util.time_now.start_of_month.epoch_millis.div[1000]>.service.<[service]>:+:1
+        - define total_votes <player.flag[votes.service].keys.parse_tag[<player.flag[votes.service.<[parse_value]>]>].sum||0>
+        - define tier <yaml[voting_rewards].list_keys[tiers].filter_tag[<yaml[voting_rewards].read[tiers.<[filter_value]>].is_less_than_or_equal_to[<[total_votes]>]>].highest>
+        - foreach <yaml[voting_rewards].list_keys[rewards.tier.<[tier]>.every]> as:k:
+            - if <[total_votes].mod[<[k]>]> == 0:
+                - if <yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.message]||null> != null:
+                    - define message <proc[colorize].context[<yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.message].separated_by[<&nl>]>|<[player]>].replace[<&pc>player_tier<&pc>].with[<[tier]>].replace[<&pc>service<&pc>].with[<context.service>]||null>
+                    - if <[message]> != null:
+                        - narrate <[message]> targets:<[player]>
+                - if <yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.announcement]||null> != null:
+                    - define announcement <proc[colorize].context[<yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.announcement].separated_by[<&nl>]||null>|<[player]>].replace[<&pc>player_tier<&pc>].with[<[tier]>].replace[<&pc>service<&pc>].with[<context.service>]||null>
+                    - if <[announcement]> != null:
+                        - announce <[announcement]>
+                - foreach <yaml[voting_rewards].read[rewards.tier.<[tier]>.every.<[k]>.commands]> as:command:
+                    - execute as_server <[command].replace_text[<&pc>player_name<&pc>].with[<[player].name>]>
+        - flag server votes:+:1
+        - foreach <yaml[voting_rewards].list_keys[rewards.party.every]> as:k:
+            - if <server.flag[votes].mod[<[k]>]> == 0:
+                - foreach <server.online_players.filter[has_flag[voted]]> as:pl:
+                    - foreach <yaml[voting_rewards].read[rewards.party.every.<[k]>.commands.players_who_voted]> as:cmd:
+                        - execute as_server <[cmd].replace_text[<&pc>player_name<&pc>].with[<[pl].name>]>
+                    - define message <proc[colorize].context[<yaml[voting_rewards].read[rewards.party.every.<[k]>.message.players_who_voted].separated_by[<&nl>]>|<[pl]>]||null>
+                    - narrate <[message]> targets:<[pl]>
+        - yaml id:player_<[player].uuid> savefile:data/players/<[player].uuid>.yml

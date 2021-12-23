@@ -5,13 +5,13 @@ big_shulker_item:
         1:
             type: shapeless
             input: material:*hulker_box|material:*hulker_box|material:*hulker_box|material:*hulker_box
-    display name: "<&r><&6><&l>Big <&e><&l>Shulker"
+    display name: <&r><&6><&l>Big <&e><&l>Shulker
 
 big_shulker_inventory:
     type: inventory
     inventory: chest
     size: 54
-    title: "<&r><&6><&l>Big <&e><&l>Shulker"
+    title: <&r><&6><&l>Big <&e><&l>Shulker
 
 big_shulker_events:
     type: world
@@ -64,7 +64,7 @@ big_shulker_events:
             - determine cancelled
         on player closes big_shulker_inventory:
         - define inv <context.inventory.note_name>
-        - define loc <[inv].replace[big_shulker_].with[].as_location>
+        - define loc <[inv].replace_text[big_shulker_].with[].as_location>
         - wait 1t
         - if <server.online_players.filter[open_inventory.note_name.equals[<context.inventory.note_name>]].size.equals[0].not>:
             - stop

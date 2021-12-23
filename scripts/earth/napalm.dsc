@@ -1,7 +1,8 @@
 napalm_entity:
     type: entity
     entity_type: falling_block
-    fallingblock_type: fire
+    mechanisms:
+        fallingblock_type: fire
 
 napalm_item:
     type: item
@@ -88,7 +89,7 @@ napalm_handler:
 napalm_flare_item:
     type: item
     material: snowball
-    display name: "Flare"
+    display name: Flare
 
 napalm_flare_events:
     type: world

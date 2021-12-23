@@ -2,7 +2,7 @@ flag_handlers:
     type: world
     debug: false
     events:
-    	on player dies:
+        on player dies:
         - flag <player> death_location:<player.location>
         on entity damaged by suffocation:
         - if <player||null> != null:
@@ -25,18 +25,18 @@ flag_handlers:
             - if <player.has_flag[no_damage]>:
                 - determine cancelled
             - if <player.has_flag[damage_zero]>:
-            	- determine 0.0
+                - determine 0.0
         # on crackshot weapon damages entity ignorecancelled:true:
         on player damages player bukkit_priority:monitor ignore_cancelled:true:
         - if <context.entity.has_flag[no_pvp_damage]> || <context.damager.has_flag[no_pvp_damage]>:
-        	- determine cancelled
+            - determine cancelled
         on entity damages entity bukkit_priority:monitor ignorecancelled:true:
         - if <context.entity.has_flag[no_pvp_damage].or[<context.damager.has_flag[no_pvp_damage]>]> && <context.entity.is_player> && <context.damager.is_player>:
-        	- determine cancelled
+            - determine cancelled
         - if <context.entity.has_flag[no_damage]>:
-        	- determine cancelled
+            - determine cancelled
         - if <context.entity.has_flag[damage_zero]>:
-        	- determine 0.0
+            - determine 0.0
         on player jumps:
         - if <player||null> != null:
             - if <player.has_flag[no_jump]> || <player.has_flag[no_move]>:
@@ -57,12 +57,12 @@ flag_handlers:
         on player quit:
         - if <player.has_flag[vanish]>:
             - determine NONE
-        
+
 no_slash_op:
     type: world
     debug: false
     events:
         on command:
         - if <context.command> == op && <context.source_type> != SERVER:
-            - narrate "no"
+            - narrate no
             - determine passively cancelled

@@ -29,7 +29,7 @@ fake_armor_update_self:
           - fakeequip <player> for:<[enemies]> <[slot]>:leather_<[slot]>[color=<color[red]>]
         - if !<[allies].is_empty>:
           - fakeequip <player> for:<[allies]> <[slot]>:leather_<[slot]>[color=<color[#00c8ff]>]
-      
+
 fake_armor_task_off:
   type: task
   debug: false
@@ -66,10 +66,10 @@ fake_armor_events:
     type: world
     debug: false
     config:
-    	playersettings:
-        	relative_armor_color:
-            	enemy: 'red'
-                ally: '#00c8ff'
+        playersettings:
+            relative_armor_color:
+                enemy: red
+                ally: <&ns>00c8ff
                 enabled: true
     events:
       after player logs in flagged:playersettings.relative_armor_color.enabled server_flagged:bork:
@@ -79,7 +79,7 @@ fake_armor_events:
 
 
 command_pvp_off:
-	type: command
+    type: command
     name: pvpoff
     debug: false
     script:
@@ -88,27 +88,27 @@ command_pvp_off:
     - narrate "You do not have PvP protection."
 
 run_combat_check:
-	type: task
+    type: task
     debug: false
     script:
         - if <[attacker].name.equals[AJ_4real]>:
-        	- narrate test target:<player[AJ_4real]>
+            - narrate test target:<server.match_player[AJ_4real]>
         - if <[attacker]> == <[victim]>:
             - stop
         - if !<[attacker].is_player> || !<[victim].is_player>:
             - stop
         - if <[attacker].has_flag[no_damage]> || <[attacker].has_flag[no_pvp_damage]>:
-        	- determine cancelled
+            - determine cancelled
         - if <[attacker].mcmmo.party||null1> == <[victim].mcmmo.party||null2>:
             - determine cancelled
         - if <[attacker].inventory.list_contents.filter[material.name.equals[air].not].size.equals[0]> || <[victim].inventory.list_contents.filter[material.name.equals[air].not].size.equals[0]>:
-        	- determine cancelled
+            - determine cancelled
         - if <[attacker].location.is_siege_zone||true> && <[victim].location.is_siege_zone||true>:
-        	- determine passively cancelled:false
+            - determine passively cancelled:false
         - if <[attacker].location.town.pvp||true> && <[victim].location.town.pvp||true>:
-        	- determine passively cancelled:false
+            - determine passively cancelled:false
         - if <[attacker].location.chunk.pvp> && <[victim].location.chunk.pvp>:
-        	- determine passively cancelled:false
+            - determine passively cancelled:false
         - if <[victim].has_flag[combat]||false>:
             - determine passively cancelled:false
         - if !<context.cancelled>:
@@ -132,23 +132,23 @@ combat_log_events:
         defaults:
             combat_tag:
                 blocked_commands:
-                - "t spawn"
-                - "n spawn"
-                - "res spawn"
+                - t spawn
+                - n spawn
+                - res spawn
     events:
-		on delta time secondly every:10:
+        on delta time secondly every:10:
         - foreach <server.online_players.filter[inventory.list_contents.size.equals[0]]> as:p:
-        	- if <[p].location.is_siege_zone>:
-            	- cast WITHER amplifier:3 duration:20s <[p]>
-    	on entity teleports:
+            - if <[p].location.is_siege_zone>:
+                - cast WITHER amplifier:3 duration:20s <[p]>
+        on entity teleports:
         - if <context.entity.has_flag[combat]> && <context.destination.distance[<context.origin>].is_more_than[100]>:
-        	- determine cancelled
+            - determine cancelled
         on entity spawns:
         - if <context.entity.entity_type.equals[ENDER_PEARL].not>:
-	        - stop
+            - stop
         - wait 10s
         - if <context.entity.is_spawned>:
-	        - remove <context.entity>
+            - remove <context.entity>
         on player death:
         - flag <player> combat:!
         - determine passively no_message
@@ -179,22 +179,22 @@ combat_log_events:
             - if <server.current_bossbars.contains[combat_time<[p].uuid>]>:
                 - bossbar remove combat_time<[p].uuid> players:<[p]>
         - foreach <server.online_players.filter[has_flag[combat]]||<list[]>> as:p:
-    		- if <server.current_bossbars.contains[combat_time<[p].uuid>]>:
-            	- bossbar update combat_time<[p].uuid> players:<[p]> "title:<&f>Combat Time Remaining<&co> <&c><[p].flag_expiration[combat].from_now.formatted_words>" progress:<[p].flag_expiration[combat].from_now.in_ticks.div[<duration[45s].in_ticks>]> color:RED
+            - if <server.current_bossbars.contains[combat_time<[p].uuid>]>:
+                - bossbar update combat_time<[p].uuid> players:<[p]> "title:<&f>Combat Time Remaining<&co> <&c><[p].flag_expiration[combat].from_now.formatted_words>" progress:<[p].flag_expiration[combat].from_now.in_ticks.div[<duration[45s].in_ticks>]> color:RED
             - else:
-            	- bossbar creates combat_time<[p].uuid> players:<[p]> "title:<&f>Combat Time Remaining<&co> <&c><[p].flag_expiration[combat].from_now.formatted_words>" progress:<[p].flag_expiration[combat].from_now.in_ticks.div[<duration[45s].in_ticks>]> color:RED
+                - bossbar creates combat_time<[p].uuid> players:<[p]> "title:<&f>Combat Time Remaining<&co> <&c><[p].flag_expiration[combat].from_now.formatted_words>" progress:<[p].flag_expiration[combat].from_now.in_ticks.div[<duration[45s].in_ticks>]> color:RED
         - foreach <server.online_players.filter[has_flag[combat]].filter[flag_expiration[combat].from_now.is_less_than[1]]||<list[]>> as:p:
             - run player_leaves_combat defmap:<map[player=<[p]>]>
         on command:
         - if <context.source_type> == PLAYER:
             - if <player.has_flag[combat]||false>:
-                - define cmd:<context.command.to_lowercase><&sp><context.args.separated_by[<&sp>].to_lowercase>
+                - define cmd:<context.command.to_lowercase><&sp><context.args.space_separated.to_lowercase>
                 - if <yaml[config].parsed_key[combat_tag.blocked_commands].parse[to_lowercase].filter_tag[<[cmd].starts_with[<[filter_value]>]>].size> != 0:
                     - determine passively cancelled
                     - narrate "<&c>You cannot run this command while in combat."
             - if <server.online_players.filter[has_flag[combat]].filter_tag[<context.raw_args.to_lowercase.contains[<[filter_value].name.to_lowercase>]>].size.equals[0].not> && <player.has_permission[combat.bypass].not>:
-            	- narrate "<&c>This player is in combat."
-            	- determine cancelled
+                - narrate "<&c>This player is in combat."
+                - determine cancelled
 
 player_leaves_combat:
     type: procedure
@@ -203,7 +203,7 @@ player_leaves_combat:
     script:
     - wait 21t
     - if !<[player].has_flag[combat]>:
-    	- if <server.current_bossbars.contains[combat_time<[player].uuid>]>:
+        - if <server.current_bossbars.contains[combat_time<[player].uuid>]>:
             - bossbar remove combat_time<[player].uuid> players:<[player]>
         - narrate "<&b>You are no longer in combat." targets:<list[<[player]>]>
 
@@ -245,4 +245,3 @@ logout_quit_command:
                 - stop
         - flag player combat:!
         - kick <player> "reason:<&a>----------------------------------------------------<&nl><&nl><&a>You have been safely removed from the server.<&nl><&nl><&a>----------------------------------------------------"
-        

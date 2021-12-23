@@ -5,8 +5,8 @@ mage_spell_summon_vex:
     name: vex
     depends: []
     script:
-    - if <player.location.find.players.within[20].exclude[<player>].size> != 0:
-        - define target <player.location.find.players.within[20].exclude[<player>].random>
+    - if <player.location.find_players_within[20].exclude[<player>].size> != 0:
+        - define target <player.location.find_players_within[20].exclude[<player>].random>
     - else:
         - define target <player.target||<player.location.find_entities.within[20].exclude[<player>].filter[is_living].filter[is_spawned].random||null>>
     - if <[target]> == null:

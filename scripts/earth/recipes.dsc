@@ -1,6 +1,6 @@
 
 custom_item_recipe_gunpowder:
-	type: item
+    type: item
     material: gunpowder
     no_id: true
     recipes:
@@ -22,14 +22,14 @@ custom_item_recipe_gunpowder:
             - gravel|copper_ingot|gravel
 
 ammunition_rocket:
-	type: item
+    type: item
     material: ghast_tear
     display name: §g§6RPG-7 Rocket
     mechanisms:
-	    custom_model_data: 510
+        custom_model_data: 510
     recipes:
-    	1:
-        	type: shaped
+        1:
+            type: shaped
             recipes_id: custom_item_recipe_rocket2
             output_quantity: 1
             input:
@@ -38,40 +38,40 @@ ammunition_rocket:
             - iron_block|material:firework_rocket|iron_block
 
 ammunition_magazine:
-	type: item
+    type: item
     material: ghast_tear
     display name: §g§6Magazine
     mechanisms:
-	    custom_model_data: 1
+        custom_model_data: 1
     recipes:
-    	1:
-        	type: shapeless
+        1:
+            type: shapeless
             recipes_id: custom_item_recipe_magazine1
             output_quantity: 1
             input: gunpowder|copper_ingot|copper_ingot
 
 ammunition_shotgun_shell:
-	type: item
+    type: item
     material: ghast_tear
     display name: §g§6ShotGun Shell
     mechanisms:
-	    custom_model_data: 3
+        custom_model_data: 3
     recipes:
-    	1:
-        	type: shapeless
+        1:
+            type: shapeless
             recipes_id: custom_item_recipe_shotgun_shell1
             output_quantity: 6
             input: gunpowder|copper_ingot|gold_ingot
 
 ammunition_clip:
-	type: item
+    type: item
     material: ghast_tear
     display name: §g§6Clip
     mechanisms:
-	    custom_model_data: 2
+        custom_model_data: 2
     recipes:
-    	1:
-        	type: shapeless
+        1:
+            type: shapeless
             recipes_id: custom_item_recipe_clip1
             output_quantity: 1
-            input: gunpowder|copper_ingot   
+            input: gunpowder|copper_ingot

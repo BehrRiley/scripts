@@ -4,7 +4,11 @@ inworld_gui_armorstand:
   mechanisms:
     custom_name: <&b>Placeholder
     custom_name_visible: false
-    equipment: air|air|air|feather[custom_model_data=6]
+    equipment:
+    - air
+    - air
+    - air
+    - feather[custom_model_data=6]
     visible: false
   flags:
     right_click_script: narrate_stuff
@@ -15,7 +19,7 @@ inworld_gui_menu_spawn:
   script:
     - define loc <player.location.with_pitch[0]>
     - if <[loc].left.to_cuboid[<[loc].forward[2].right>].blocks[!air].filter[is_solid].size> > 0:
-      - narrate "nope"
+      - narrate nope
       - stop
     - fakespawn inworld_gui_armorstand[flag=custom_name=<&d>Enderchest] <[loc].forward[2].below[0.75]> duration:10s save:as1
     - flag <entry[as1].faked_entity> right_click_script:ender_chest_open
@@ -43,4 +47,4 @@ narrate_stuff:
   type: task
   debug: false
   script:
-  - narrate "STUFF!"
+  - narrate STUFF!

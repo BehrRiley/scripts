@@ -1,12 +1,12 @@
 mobs_events:
-	type: world
+    type: world
     debug: false
     events:
-    	on wandering_trader spawns because natural:
+        on wandering_trader spawns because natural:
         - determine cancelled
-    	on zombie_villager spawns because natural:
+        on zombie_villager spawns because natural:
         - determine cancelled
-    	on phantom spawns because natural:
+        on phantom spawns because natural:
         - determine cancelled
         on ender_crystal spawns:
         - determine cancelled

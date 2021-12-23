@@ -15,7 +15,7 @@ dispose_command:
     tab complete:
         - if !<player.has_permission[<yaml[config].parsed_key[dispose_command.permission_required]>]>:
             - stop
-        - define index <context.raw_args.split[].count[<&sp>]>
+        - define index <context.raw_args.to_list.count[<&sp>]>
         - if <player.has_flag[dispose_items]>:
             - define disposed_items <player.flag[dispose_items].as_list>
         - else:
@@ -38,7 +38,7 @@ dispose_command:
         - else:
             - define disposed_items <list[]>
         - if <[index]> == 0:
-            - narrate "<&e>Blacklisted Items: <&nl><[disposed_items].parse[name.to_titlecase].parse[replace[_].with[<&sp>]].formatted>"
+            - narrate "<&e>Blacklisted Items: <&nl><[disposed_items].parse[name.to_titlecase].parse.replace_text[_].with[<&sp>]].formatted>"
             - stop
         - define excluded_items:<yaml[config].parsed_key[dispose_command.disallowed_material_types].as_list||<list[]>>
         - choose <context.args.get[1]>:

@@ -49,4 +49,4 @@ bookshelves_inventory:
   title: Bookshelf
   size: 9
   slots:
-  - "[] [] [] [] [] [] [] [] []"
+  - [] [] [] [] [] [] [] [] []

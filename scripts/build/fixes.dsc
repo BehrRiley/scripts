@@ -14,11 +14,11 @@ fixes_events:
                 entities:
                     maximum_per_chunk: 50
     events:
-    	on block falls:
+        on block falls:
         - determine cancelled
         on player receives message:
         - if <context.message.strip_color.starts_with[<&sp><&sp>Eg:<&sp>/tr<&sp>]>:
-            - determine MESSAGE:<context.message.replace[/tr].with[/trs]>
+            - determine MESSAGE:<context.message.replace_text[/tr].with[/trs]>
         on redstone recalculated:
         - define loc <context.location.center>
         - ratelimit <[loc]> 2t
@@ -43,7 +43,7 @@ fixes_events:
         - if <[removed].is_more_than[0]>:
             - announce "<&c><[removed]> entities were removed from crowded chunks."
         on ender_pearl spawns:
-        - adjust <queue> linked_player:<context.location.find.players.within[0.001].get[1]>
+        - adjust <queue> linked_player:<context.location.find_players_within[0.001].get[1]>
         - itemcooldown ender_pearl duration:<yaml[config].read[enderpearl.cooldown]>
         on player clicks block:
         - if <player.item_in_hand.material.name.to_lowercase> == ender_pearl || <player.item_in_offhand.material.name.to_lowercase> == ender_pearl:
@@ -69,18 +69,18 @@ fixes_events:
         on command:
         - define cmd <context.command.to_lowercase.split[<&co>].get[2]||<context.command.to_lowercase>>
         - define args <context.args||<list[]>>
-        - if <[cmd]> == "cmi":
+        - if <[cmd]> == cmi:
             - define cmd <context.args.get[1].to_lowercase||<[cmd]>>
             - define args <[args].remove[1]>
-        - if <[cmd]> == "ac":
+        - if <[cmd]> == ac:
             - determine passively cancelled
-            - execute as_player "alliancechat"
-        - if <[cmd]> == "n" || <[cmd]> == "nation":
-            - if <[args].get[1]||null> == "set":
-                - if <[args].get[2]||null> == "spawn":
+            - execute as_player alliancechat
+        - if <[cmd]> == n || <[cmd]> == nation:
+            - if <[args].get[1]||null> == set:
+                - if <[args].get[2]||null> == spawn:
                     - if !<player.town_immunity.is_less_than[0s]>:
                         - define before <player.town.spawn>
-                        - if <[args].get[3]||null> != "confirm":
+                        - if <[args].get[3]||null> != confirm:
                             - narrate "<&c>[!] Moving your nation's spawn will remove the capitals siege immunity. Are you sure you want to do this?<&nl><element[<&a><&lb>Confirm<&rb><&r>].on_click[/nation set spawn confirm]>"
                             - determine passively cancelled
                         - else:
@@ -91,7 +91,7 @@ fixes_events:
                                         - execute as_server "swa siegeimmunity town <player.location.town.name> 0"
                                         - narrate "<&c>Due to your nations capitals spawn being changed, your towns siege immunity has been removed." targets:<player.town.residents.filter[is_online]>
 
-        - if <[cmd]> == "rename" || <[cmd]> == "itemname":
+        - if <[cmd]> == rename || <[cmd]> == itemname:
             - if !<player.has_permission[cmi.command.itemname]>:
                 - stop
             - if <[args].size> == 0:
@@ -113,7 +113,7 @@ fixes_events:
             - if <context.source_type> != SERVER && <player.uuid> != 2d77f2e6-ccc8-4642-933e-62c83d1b501b:
                 - determine passively cancelled
                 - narrate "<&c>This command has been restricted."
-        - if <[cmd]> == "lore":
+        - if <[cmd]> == lore:
             - if !<player.has_permission[lores.lore]>:
                 - stop
             - if <context.args.get[1]||null> == null:
@@ -153,12 +153,12 @@ trs_command:
     tab complete:
     - define str <context.raw_args>
     - while <[str].contains_text[<&sp><&sp>]>:
-        - define str <[str].replace[<&sp><&sp>].with[<&sp>]>
-    - define size <[str].split[].count[<&sp>].add[1]>
+        - define str <[str].replace_text[<&sp><&sp>].with[<&sp>]>
+    - define size <[str].to_list.count[<&sp>].add[1]>
     - if <[size]> == 1:
         - determine <list[survey|nationcollect|towncollect].filter[starts_with[<context.args.get[1].to_lowercase||>]]>
     script:
-    - execute as_player "townyresources <context.args.separated_by[<&sp>]>"
+    - execute as_player "townyresources <context.args.space_separated>"
 
 pm_command:
     type: command
@@ -169,9 +169,9 @@ pm_command:
         - stop
     - define str <context.raw_args>
     - while <[str].contains_text[<&sp><&sp>]>:
-        - define str <[str].replace[<&sp><&sp>].with[<&sp>]>
-    - define size <[str].split[].count[<&sp>].add[1]>
+        - define str <[str].replace_text[<&sp><&sp>].with[<&sp>]>
+    - define size <[str].to_list.count[<&sp>].add[1]>
     - if <[size]> == 1:
         - determine <server.online_players.filter[name.to_lowercase.starts_with[<context.args.get[1].to_lowercase||>]].parse[name]>
     script:
-    - execute as_player "cmi msg <context.args.separated_by[<&sp>]>"
+    - execute as_player "cmi msg <context.args.space_separated>"

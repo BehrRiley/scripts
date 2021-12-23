@@ -14,20 +14,20 @@ config_handler:
                 done: <&e>Done!
                 cannot_use_item_here: <&c>You cannot use that item here.
             announcements:
-            	on join:
+                on join:
                 - flag <player> skull_item:<player.skull_item>
-                - "&3Welcome to the server."
-                - "&3Enjoy your stay."
-            	on first join:
-                - "&3Welcome to the server."
-                - "&3Enjoy your stay."
+                - &3Welcome to the server.
+                - &3Enjoy your stay.
+                on first join:
+                - &3Welcome to the server.
+                - &3Enjoy your stay.
                 messages:
-                    '1': 
-                    - "&3[Tips] <&b>To make a town do <&L>/t new (name for the town)."
-                    '2': 
-                    - "&3[Tips] <&b>Join the discord for support and to meet other people who also enjoy the server at discord.gg/orbis."
-                    '3': 
-                    - "&3[Tips] <&b>Do /vote to recieve money and missions."
+                    1:
+                    - &3[Tips] <&b>To make a town do <&L>/t new (name for the town).
+                    2:
+                    - &3[Tips] <&b>Join the discord for support and to meet other people who also enjoy the server at discord.gg/orbis.
+                    3:
+                    - &3[Tips] <&b>Do /vote to recieve money and missions.
     reload:
         - if !<server.list_files[].contains[data]>:
             - yaml create id:config
@@ -50,7 +50,7 @@ config_handler:
         on server start:
         - inject config_handler path:reload
         - foreach <yaml[config].read[startup_commands]>:
-        	- execute as_server <[value]>
+            - execute as_server <[value]>
 
 
 gimmeop_command:

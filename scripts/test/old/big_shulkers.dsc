@@ -2,21 +2,21 @@
 big_shulker_item:
     type: item
     material: shulker_box
-    display name: "<&r><&6><&l>Big <&e><&l>Shulker"
+    display name: <&r><&6><&l>Big <&e><&l>Shulker
 
 big_shulker_inventory:
     type: inventory
     inventory: chest
     size: 54
-    title: "<&r><&6><&l>Big <&e><&l>Shulker"
+    title: <&r><&6><&l>Big <&e><&l>Shulker
 
 big_shulker_events:
     type: world
     debug: false
     events:
-    	on block explodes:
+        on block explodes:
         - determine <context.blocks.filter[has_flag[big_shulker].not]>
-    	on entity explodes:
+        on entity explodes:
         - determine <context.blocks.filter[has_flag[big_shulker].not]>
         on piston extends:
         - if <context.blocks.filter[has_flag[big_shulker]].size.equals[0].not>:
@@ -61,7 +61,7 @@ big_shulker_events:
             - determine cancelled
         on player closes big_shulker_inventory:
         - define inv <context.inventory.note_name>
-        - define loc <[inv].replace[big_shulker_].with[].as_location>
+        - define loc <[inv].replace_text[big_shulker_].with[].as_location>
         - wait 1t
         - if <server.online_players.filter[open_inventory.note_name.equals[<context.inventory.note_name>]].size.equals[0].not>:
             - stop
@@ -71,10 +71,10 @@ big_shulker_events:
         - note remove as:big_shulker_<[loc]>
         on player opens inventory:
         - if <context.inventory.location.material.name.equals[shulker_box].not||true>:
-        	- stop
+            - stop
         - define loc <context.inventory.location>
         - if <[loc].has_flag[big_shulker].not>:
-        	- stop
+            - stop
         - determine cancelled
         on player right clicks shulker_box location_flagged:big_shulker bukkit_priority:MONITOR:
         - if <player.is_sneaking> && <player.item_in_hand.material.name.equals[air].not>:

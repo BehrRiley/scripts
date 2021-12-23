@@ -36,7 +36,7 @@ lightning_rod_events:
                     - remove <context.projectile>
                     - stop
             - remove <context.projectile>
-            - foreach <[loc].find.players.within[3]>:
+            - foreach <[loc].find_players_within[3]>:
                 - if !<proc[check_hit_perms_l1].context[<[p]>|<[value]>]>:
                     - define pl:|:<[value]>
                     - flag <[value]> friendly:<[p]>

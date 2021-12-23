@@ -5,4 +5,4 @@ startup_handler:
     events:
         on server start bukkit_priority:monitor:
         - foreach <yaml[config].read[startup_commands]>:
-        	- execute as_server <[value]>
+            - execute as_server <[value]>
